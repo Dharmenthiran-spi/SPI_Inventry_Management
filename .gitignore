@@ -1,0 +1,28 @@
+# Python build & cache artifacts
+**/__pycache__/
+*.py[cod]
+*$py.class
+Inventry Backend/MySql_Initialize/build/
+Inventry Backend/MySql_Initialize/dist/
+
+# Environments
+.env
+.venv/
+env/
+venv/
+
+# Flutter & Dart artifacts (safeguard)
+**/.dart_tool/
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+
+# IDE & Editor files
+.idea/
+*.iml
+.vscode/
+
+# Operating System files
+Thumbs.db
+[Dd]esktop.ini
+.DS_Store

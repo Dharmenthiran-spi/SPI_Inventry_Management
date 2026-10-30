@@ -1,0 +1,96 @@
+============================================================
+  INVENTRY MANAGEMENT — MySQL Setup Verification Guide
+============================================================
+
+STEP 1 — Check Windows Service is Running
+------------------------------------------
+Open PowerShell or CMD and run:
+
+    sc query Inventry_Management
+
+   Look for:  STATE : 4  RUNNING
+
+
+------------------------------------------------------------
+STEP 2 — MySQL Workbench (GUI — Easiest)
+------------------------------------------
+1. Open MySQL Workbench
+2. Add new connection:
+      Host     : 127.0.0.1
+      Port     : 3306
+      Username : sde1
+      Password : sde100
+3. Connect → expand "Schemas"
+   You should see:  CompanentsInventry
+4. Expand it → Tables → should show:
+      - Inventry
+      - Event
+      - User
+
+
+------------------------------------------------------------
+STEP 3 — Command Line (Quick Check)
+------------------------------------------
+Open PowerShell and run:
+
+    cd C:\mysql\mysql-8.0.43-winx64\bin
+    .\mysql.exe -u sde1 -psde100 -h 127.0.0.1
+
+Inside MySQL shell, type:
+
+    SHOW DATABASES;
+    USE CompanentsInventry;
+    SHOW TABLES;
+    DESCRIBE Inventry;
+    DESCRIBE Event;
+    DESCRIBE User;
+
+
+------------------------------------------------------------
+STEP 4 — Check All Users Exist
+------------------------------------------
+Inside MySQL shell as root or sde1:
+
+    SELECT user, host FROM mysql.user
+    WHERE user IN ('sde1','embed1','embed2','embed3','embed4','embed5');
+
+   Should return 10 rows (2 hosts each: localhost + %)
+
+
+------------------------------------------------------------
+STEP 5 — Check Grants for Embed Users
+------------------------------------------
+    SHOW GRANTS FOR 'embed1'@'%';
+    SHOW GRANTS FOR 'embed2'@'%';
+    (repeat for embed3, embed4, embed5)
+
+   Should show:  GRANT ALL PRIVILEGES ON CompanentsInventry.*
+
+
+------------------------------------------------------------
+STEP 6 — Check Firewall Rule
+------------------------------------------
+In PowerShell:
+
+    netsh advfirewall firewall show rule name="MySQL_InventryMgmt"
+
+   Should show:  Action: Allow   |   LocalPort: 3306
+
+
+============================================================
+  CREDENTIALS SUMMARY
+============================================================
+
+  Service  : Inventry_Management
+  Database : CompanentsInventry
+  Port     : 3306
+
+  Root     : root       / SPI12345
+  Admin    : sde1       / sde100
+  Embed 1  : embed1     / embed100
+  Embed 2  : embed2     / embed200
+  Embed 3  : embed3     / embed300
+  Embed 4  : embed4     / embed400
+  Embed 5  : embed5     / embed500
+
+============================================================
